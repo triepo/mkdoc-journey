@@ -1,4 +1,5 @@
-Hier werde ich erklären, wie eine mit LUKS verschlüsselte Partition durch einem Fido2 Token entsperrt werden kann
+On this page I will explain, how to decrypt LUKS encrypted partition
 
 ### Voraussetzungen:
- * Debian 13 mit Verschlüsselung
+ * Debian 13 setup with encryption
+ * Hardware fido2 Token (e.g.: yubikey, Token2)
