@@ -9,13 +9,18 @@ def add_two_numbers(num1, num2):
 result = add_two_numbers(5, 3)
 print('The sum is:', result)
 ```
-## Shell output
-```shell
-stefan@t450-deb13:~/scripts/python/mk-docs$ ls -l
-insgesamt 16
-drwxrwxr-x 3 stefan stefan 4096 24. Jul 23:21 docs
--rw-rw-r-- 1 stefan stefan  918 24. Jul 23:26 mkdocs.yml
-drwxrwxr-x 7 stefan stefan 4096 24. Jul 19:02 site
-drwxrwxr-x 5 stefan stefan 4096 24. Jul 18:46 venv
-stefan@t450-deb13:~/scripts/python/mk-docs$
+
+```shell title="Test"
+nimda@trixie:~$ lsblk
+
+NAME                    MAJ:MIN RM  SIZE RO TYPE  MOUNTPOINTS
+sr0                      11:0    1  3,7G  0 rom   
+vda                     254:0    0   20G  0 disk  
+├─vda1                  254:1    0  966M  0 part  /boot
+├─vda2                  254:2    0    1K  0 part  
+└─vda5                  254:5    0 19,1G  0 part  
+  └─vda5_crypt          253:0    0   19G  0 crypt 
+    ├─trixie--vg-root   253:1    0   18G  0 lvm   /
+    └─trixie--vg-swap_1 253:2    0    1G  0 lvm   [SWAP]
+
 ```
