@@ -1,12 +1,11 @@
-site_name: mkdoc-journey
+site_name: LUKS mit Fido2 Stick
 
 theme:
   name: material
   font:
     text: Merriweather Sans
     code: Red Hat Mono
-  #icon:
-    #logo: fontawesome/solid/w
+
   logo: assets/jigo-evil-tux-4930.png
   favicon: assets/favicon.ico
   palette: 
@@ -24,12 +23,6 @@ theme:
       accent: deep orange
 
 markdown_extensions:
-  - attr_list
-  - pymdownx.emoji:
-      emoji_index: !!python/name:material.extensions.emoji.twemoji
-      emoji_generator: !!python/name:material.extensions.emoji.to_svg
-
-markdown_extensions:
   - pymdownx.highlight:
       anchor_linenums: true
       line_spans: __span
@@ -37,3 +30,9 @@ markdown_extensions:
   - pymdownx.inlinehilite
   - pymdownx.snippets
   - pymdownx.superfences
+#markdown_extensions:
+  - attr_list
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+
