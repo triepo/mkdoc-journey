@@ -1,4 +1,4 @@
-site_name: LUKS mit Fido2 Stick
+site_name: Pages by Stefan
 
 theme:
   name: material
@@ -8,6 +8,8 @@ theme:
 
   logo: assets/jigo-evil-tux-4930.png
   favicon: assets/favicon.ico
+  features:
+    - navigation.footer
   palette: 
     - scheme: slate
       toggle:
@@ -17,7 +19,7 @@ theme:
       accent: deep purple
     - scheme: default
       toggle:
-        icon: material/weather-sunny
+        icon: material/weather-night
         name: Light Mode
       primary: blue
       accent: deep orange
@@ -30,9 +32,10 @@ markdown_extensions:
   - pymdownx.inlinehilite
   - pymdownx.snippets
   - pymdownx.superfences
-#markdown_extensions:
+
   - attr_list
   - pymdownx.emoji:
       emoji_index: !!python/name:material.extensions.emoji.twemoji
       emoji_generator: !!python/name:material.extensions.emoji.to_svg
 
+copyright: Copyright &copy; 2025 Stefan Triep
