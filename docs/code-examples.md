@@ -1,4 +1,4 @@
-an example of codeblock in python
+## An example of codeblock in python
 
 ```py title="Add numbers.py"
 # Function to add two numbers
@@ -9,7 +9,7 @@ def add_two_numbers(num1, num2):
 result = add_two_numbers(5, 3)
 print('The sum is:', result)
 ```
-
+## Shell output
 ```shell
 stefan@t450-deb13:~/scripts/python/mk-docs$ ls -l
 insgesamt 16
