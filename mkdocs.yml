@@ -1,0 +1,39 @@
+site_name: mkdoc-journey
+
+theme:
+  name: material
+  font:
+    text: Merriweather Sans
+    code: Red Hat Mono
+  #icon:
+    #logo: fontawesome/solid/w
+  logo: assets/jigo-evil-tux-4930.png
+  favicon: assets/favicon.ico
+  palette: 
+    - scheme: slate
+      toggle:
+        icon: material/weather-sunny
+        name: Dark Mode
+      primary: green
+      accent: deep purple
+    - scheme: default
+      toggle:
+        icon: material/weather-sunny
+        name: Light Mode
+      primary: blue
+      accent: deep orange
+
+markdown_extensions:
+  - attr_list
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
