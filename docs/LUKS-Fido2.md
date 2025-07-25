@@ -1,6 +1,11 @@
 
 On this page I will explain, how to decrypt LUKS encrypted partition
 
+
+I've tested it on several virtual machines and also my laptop works with this setup.
+You can take this at your own risk.
+I don't take any responsability for misconfiguration on your side
+
 ### Prerequisites
  * Debian 13 setup with encryption
  * Hardware fido2 Token (e.g.: yubikey, Token2)
