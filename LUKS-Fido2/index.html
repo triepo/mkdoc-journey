@@ -298,7 +298,70 @@
         <li class="md-nav__item">
   <a href="#prerequisites" class="md-nav__link">
     <span class="md-ellipsis">
-      Prerequisites:
+      Prerequisites
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#find-partition" class="md-nav__link">
+    <span class="md-ellipsis">
+      Find Partition
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#show-fido2-key" class="md-nav__link">
+    <span class="md-ellipsis">
+      Show fido2 key
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#enroll" class="md-nav__link">
+    <span class="md-ellipsis">
+      Enroll
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#checking" class="md-nav__link">
+    <span class="md-ellipsis">
+      Checking
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#edit-etccrypttab" class="md-nav__link">
+    <span class="md-ellipsis">
+      Edit /etc/crypttab
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#initramfs" class="md-nav__link">
+    <span class="md-ellipsis">
+      initramfs
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dracut" class="md-nav__link">
+    <span class="md-ellipsis">
+      dracut
     </span>
   </a>
   
@@ -361,7 +424,70 @@
         <li class="md-nav__item">
   <a href="#prerequisites" class="md-nav__link">
     <span class="md-ellipsis">
-      Prerequisites:
+      Prerequisites
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#find-partition" class="md-nav__link">
+    <span class="md-ellipsis">
+      Find Partition
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#show-fido2-key" class="md-nav__link">
+    <span class="md-ellipsis">
+      Show fido2 key
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#enroll" class="md-nav__link">
+    <span class="md-ellipsis">
+      Enroll
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#checking" class="md-nav__link">
+    <span class="md-ellipsis">
+      Checking
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#edit-etccrypttab" class="md-nav__link">
+    <span class="md-ellipsis">
+      Edit /etc/crypttab
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#initramfs" class="md-nav__link">
+    <span class="md-ellipsis">
+      initramfs
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dracut" class="md-nav__link">
+    <span class="md-ellipsis">
+      dracut
     </span>
   </a>
   
@@ -386,11 +512,99 @@
   <h1>LUKS Fido2</h1>
 
 <p>On this page I will explain, how to decrypt LUKS encrypted partition</p>
-<h3 id="prerequisites">Prerequisites:</h3>
+<h3 id="prerequisites">Prerequisites</h3>
 <ul>
 <li>Debian 13 setup with encryption</li>
 <li>Hardware fido2 Token (e.g.: yubikey, Token2)</li>
 </ul>
+<h3 id="find-partition">Find Partition</h3>
+<p>First we need find to find the encrypted filesystems.
+ We will use <code>lsblk</code> to figure that out</p>
+<p><div class="language-shell highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Output of 'lsblk'</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-0-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-0-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-0-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-0-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-0-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-0-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-0-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-0-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-0-10">10</a></span>
+<span class="normal"><a href="#__codelineno-0-11">11</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1"></a>nimda@trixie:~$<span class="w"> </span>lsblk
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2"></a>NAME<span class="w">                    </span>MAJ:MIN<span class="w"> </span>RM<span class="w">  </span>SIZE<span class="w"> </span>RO<span class="w"> </span>TYPE<span class="w">  </span>MOUNTPOINTS
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3"></a>sr0<span class="w">                      </span><span class="m">11</span>:0<span class="w">    </span><span class="m">1</span><span class="w">  </span><span class="m">3</span>,7G<span class="w">  </span><span class="m">0</span><span class="w"> </span>rom<span class="w">   </span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4"></a>vda<span class="w">                     </span><span class="m">254</span>:0<span class="w">    </span><span class="m">0</span><span class="w">   </span>20G<span class="w">  </span><span class="m">0</span><span class="w"> </span>disk<span class="w">  </span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5"></a>├─vda1<span class="w">                  </span><span class="m">254</span>:1<span class="w">    </span><span class="m">0</span><span class="w">  </span>966M<span class="w">  </span><span class="m">0</span><span class="w"> </span>part<span class="w">  </span>/boot
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6"></a>├─vda2<span class="w">                  </span><span class="m">254</span>:2<span class="w">    </span><span class="m">0</span><span class="w">    </span>1K<span class="w">  </span><span class="m">0</span><span class="w"> </span>part<span class="w">  </span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7"></a><span class="hll">└─vda5<span class="w">                  </span><span class="m">254</span>:5<span class="w">    </span><span class="m">0</span><span class="w"> </span><span class="m">19</span>,1G<span class="w">  </span><span class="m">0</span><span class="w"> </span>part<span class="w">  </span>
+</span></span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8"></a><span class="hll"><span class="w">  </span>└─vda5_crypt<span class="w">          </span><span class="m">253</span>:0<span class="w">    </span><span class="m">0</span><span class="w">   </span>19G<span class="w">  </span><span class="m">0</span><span class="w"> </span>crypt<span class="w"> </span>
+</span></span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9"></a><span class="hll"><span class="w">    </span>├─trixie--vg-root<span class="w">   </span><span class="m">253</span>:1<span class="w">    </span><span class="m">0</span><span class="w">   </span>18G<span class="w">  </span><span class="m">0</span><span class="w"> </span>lvm<span class="w">   </span>/
+</span></span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10"></a><span class="hll"><span class="w">    </span>└─trixie--vg-swap_1<span class="w"> </span><span class="m">253</span>:2<span class="w">    </span><span class="m">0</span><span class="w">    </span>1G<span class="w">  </span><span class="m">0</span><span class="w"> </span>lvm<span class="w">   </span><span class="o">[</span>SWAP<span class="o">]</span>
+</span></span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11"></a>nimda@trixie:~$<span class="w"> </span>
+</span></code></pre></div></td></tr></table></div>
+In this case we have <code>/dev/vda5</code></p>
+<h3 id="show-fido2-key">Show fido2 key</h3>
+<p>Next action will be, to check, if fido2 token is found using <code>systemd-cryptenroll</code>command</p>
+<p><div class="language-shell highlight"><span class="filename">Output of 'systemd-cryptenroll'</span><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>nimda@trixie:~$<span class="w"> </span>systemd-cryptenroll<span class="w"> </span>--fido2-device<span class="o">=</span>list
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>PATH<span class="w">         </span>MANUFACTURER<span class="w"> </span>PRODUCT<span class="w">                  </span>COMPATIBLE
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>/dev/hidraw2<span class="w"> </span>TOKEN2<span class="w">       </span>FIDO2<span class="w"> </span>Security<span class="w"> </span>Key<span class="o">(</span><span class="m">0026</span><span class="o">)</span><span class="w"> </span>✓
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>nimda@trixie:~$<span class="w"> </span>
+</span></code></pre></div>
+Now, as we have all needed information, we can enroll the token</p>
+<h3 id="enroll">Enroll</h3>
+<div class="language-shell highlight"><span class="filename">Enrolling token</span><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>nimda@trixie:~$<span class="w"> </span>sudo<span class="w"> </span>systemd-cryptenroll<span class="w"> </span>/dev/vda5<span class="w"> </span>--fido2-device<span class="o">=</span>auto<span class="w"> </span>-fido2-with-client-pin<span class="o">=</span>yes
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="o">[</span>sudo<span class="o">]</span><span class="w"> </span>Passwort<span class="w"> </span>für<span class="w"> </span>nimda:<span class="w"> </span>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>🔐<span class="w"> </span>Please<span class="w"> </span>enter<span class="w"> </span>current<span class="w"> </span>passphrase<span class="w"> </span><span class="k">for</span><span class="w"> </span>disk<span class="w"> </span>/dev/vda5:<span class="w"> </span>•••••••••<span class="w">               </span>
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>Initializing<span class="w"> </span>FIDO2<span class="w"> </span>credential<span class="w"> </span>on<span class="w"> </span>security<span class="w"> </span>token.
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>👆<span class="w"> </span><span class="o">(</span>Hint:<span class="w"> </span>This<span class="w"> </span>might<span class="w"> </span>require<span class="w"> </span>confirmation<span class="w"> </span>of<span class="w"> </span>user<span class="w"> </span>presence<span class="w"> </span>on<span class="w"> </span>security<span class="w"> </span>token.<span class="o">)</span>
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>🔐<span class="w"> </span>Please<span class="w"> </span>enter<span class="w"> </span>security<span class="w"> </span>token<span class="w"> </span>PIN:<span class="w"> </span>••••••<span class="w">                  </span>
+</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>Generating<span class="w"> </span>secret<span class="w"> </span>key<span class="w"> </span>on<span class="w"> </span>FIDO2<span class="w"> </span>security<span class="w"> </span>token.
+</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>👆<span class="w"> </span>In<span class="w"> </span>order<span class="w"> </span>to<span class="w"> </span>allow<span class="w"> </span>secret<span class="w"> </span>key<span class="w"> </span>generation,<span class="w"> </span>please<span class="w"> </span>confirm<span class="w"> </span>presence<span class="w"> </span>on<span class="w"> </span>security<span class="w"> </span>token.
+</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>New<span class="w"> </span>FIDO2<span class="w"> </span>token<span class="w"> </span>enrolled<span class="w"> </span>as<span class="w"> </span>key<span class="w"> </span>slot<span class="w"> </span><span class="m">1</span>.
+</span><span id="__span-2-10"><a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>nimda@trixie:~$<span class="w"> </span>
+</span></code></pre></div>
+<h3 id="checking">Checking</h3>
+<p>To check, that the token was configured correctly, we can use the command <code>sudo cryptsetup luksDump /dev/vda5</code></p>
+<div class="language-shell highlight"><span class="filename">Output of 'cryptsetup luksDump /dev/vda5'</span><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>~~~
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>Tokens:
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">  </span><span class="m">0</span>:<span class="w"> </span>systemd-fido2
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">        </span>fido2-credential:
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">                    </span><span class="m">98</span><span class="w"> </span>9b<span class="w"> </span><span class="m">58</span><span class="w"> </span>d4<span class="w"> </span><span class="m">52</span><span class="w"> </span><span class="m">08</span><span class="w"> </span>4f<span class="w"> </span>1b<span class="w"> </span><span class="m">65</span><span class="w"> </span>2a<span class="w"> </span>e9<span class="w"> </span>c7<span class="w"> </span><span class="m">86</span><span class="w"> </span>6b<span class="w"> </span><span class="m">45</span><span class="w"> </span>ba
+</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="w">                    </span><span class="m">66</span><span class="w"> </span>3b<span class="w"> </span>c1<span class="w"> </span>7f<span class="w"> </span>cb<span class="w"> </span>d4<span class="w"> </span><span class="m">39</span><span class="w"> </span>0b<span class="w"> </span>e4<span class="w"> </span>5e<span class="w"> </span>3b<span class="w"> </span>4b<span class="w"> </span>ea<span class="w"> </span><span class="m">36</span><span class="w"> </span>5d<span class="w"> </span>0e
+</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="w">                    </span>7c<span class="w"> </span>b8<span class="w"> </span><span class="m">50</span><span class="w"> </span><span class="m">38</span><span class="w"> </span>a2<span class="w"> </span>5a<span class="w"> </span><span class="m">31</span><span class="w"> </span><span class="m">09</span><span class="w"> </span>d7<span class="w"> </span><span class="m">91</span><span class="w"> </span>1e<span class="w"> </span><span class="nb">cd</span><span class="w"> </span><span class="m">78</span><span class="w"> </span><span class="m">46</span><span class="w"> </span>4c<span class="w"> </span>cb
+</span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="w">                    </span><span class="nb">fc</span><span class="w"> </span>6f<span class="w"> </span><span class="m">51</span><span class="w"> </span>ee<span class="w"> </span>da<span class="w"> </span>b5<span class="w"> </span><span class="m">61</span><span class="w"> </span><span class="m">79</span><span class="w"> </span><span class="m">44</span><span class="w"> </span><span class="m">07</span><span class="w"> </span><span class="m">82</span><span class="w"> </span>2a<span class="w"> </span><span class="m">56</span><span class="w"> </span><span class="m">92</span><span class="w"> </span>ad<span class="w"> </span>bf
+</span><span id="__span-3-9"><a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="w">                    </span>2d<span class="w"> </span>cb<span class="w"> </span>cc<span class="w"> </span><span class="m">53</span><span class="w"> </span>1b<span class="w"> </span>c6<span class="w"> </span><span class="m">70</span><span class="w"> </span>8b<span class="w"> </span><span class="m">57</span><span class="w"> </span>4b<span class="w"> </span>9f<span class="w"> </span><span class="m">75</span><span class="w"> </span><span class="m">59</span><span class="w"> </span><span class="m">60</span><span class="w"> </span>be<span class="w"> </span><span class="m">54</span>
+</span><span id="__span-3-10"><a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="w">                    </span><span class="m">21</span><span class="w"> </span>cf<span class="w"> </span><span class="m">89</span><span class="w"> </span>b0<span class="w"> </span>f5<span class="w"> </span>1b<span class="w"> </span><span class="m">28</span><span class="w"> </span>8e<span class="w"> </span>2f<span class="w"> </span>3c<span class="w"> </span>5d<span class="w"> </span><span class="m">44</span><span class="w"> </span>f5<span class="w"> </span>5e<span class="w"> </span>7c<span class="w"> </span>da
+</span><span id="__span-3-11"><a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="w">        </span>fido2-salt:<span class="w"> </span>4a<span class="w"> </span>f5<span class="w"> </span><span class="m">09</span><span class="w"> </span>cf<span class="w"> </span>a8<span class="w"> </span><span class="m">84</span><span class="w"> </span><span class="m">66</span><span class="w"> </span>f5<span class="w"> </span>9e<span class="w"> </span>e4<span class="w"> </span>3e<span class="w"> </span>6e<span class="w"> </span>c3<span class="w"> </span><span class="m">19</span><span class="w"> </span>1a<span class="w"> </span>a1
+</span><span id="__span-3-12"><a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="w">                    </span>7e<span class="w"> </span><span class="m">52</span><span class="w"> </span>d5<span class="w"> </span>e3<span class="w"> </span>ef<span class="w"> </span><span class="nb">cd</span><span class="w"> </span><span class="m">45</span><span class="w"> </span>bd<span class="w"> </span>e3<span class="w"> </span><span class="m">60</span><span class="w"> </span><span class="m">02</span><span class="w"> </span><span class="m">09</span><span class="w"> </span><span class="m">94</span><span class="w"> </span><span class="m">45</span><span class="w"> </span>ea<span class="w"> </span><span class="m">00</span>
+</span><span id="__span-3-13"><a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="w">        </span>fido2-rp:<span class="w">   </span>io.systemd.cryptsetup
+</span><span id="__span-3-14"><a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a><span class="w">        </span>fido2-clientPin-required:
+</span><span id="__span-3-15"><a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a><span class="w">                    </span><span class="nb">true</span>
+</span><span id="__span-3-16"><a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a><span class="w">        </span>fido2-up-required:
+</span><span id="__span-3-17"><a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a><span class="w">                    </span><span class="nb">true</span>
+</span><span id="__span-3-18"><a id="__codelineno-3-18" name="__codelineno-3-18" href="#__codelineno-3-18"></a><span class="w">        </span>fido2-uv-required:
+</span><span id="__span-3-19"><a id="__codelineno-3-19" name="__codelineno-3-19" href="#__codelineno-3-19"></a><span class="w">                    </span><span class="nb">false</span>
+</span><span id="__span-3-20"><a id="__codelineno-3-20" name="__codelineno-3-20" href="#__codelineno-3-20"></a><span class="w">        </span>Keyslot:<span class="w">    </span><span class="m">1</span>
+</span><span id="__span-3-21"><a id="__codelineno-3-21" name="__codelineno-3-21" href="#__codelineno-3-21"></a>~~~
+</span></code></pre></div>
+<h3 id="edit-etccrypttab">Edit /etc/crypttab</h3>
+<p>Next step is to add <code>,fido2-device=auto</code> to file <code>/etc/crypttab</code></p>
+<div class="language-shell highlight"><span class="filename">Content of '/etc/crypttab'</span><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>nimda@trixie:~$<span class="w"> </span>cat<span class="w"> </span>/etc/crypttab<span class="w"> </span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>vda5_crypt<span class="w"> </span><span class="nv">UUID</span><span class="o">=</span>fb3239d3-be24-446e-b956-8fe4aea8f34c<span class="w"> </span>none<span class="w"> </span>luks,discard,x-initrd.attach,fido2-device<span class="o">=</span>auto
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>nimda@trixie:~$
+</span></code></pre></div>
+<h3 id="initramfs">initramfs</h3>
+<p>As the tool <code>initramfs</code> has a bug not recognizing the option we added, we need to install <code>dracut</code></p>
+<h2 id="dracut">dracut</h2>
+<p>Create config file for <code>dracut</code>
+<div class="language-shell highlight"><span class="filename">'dracut' config</span><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>sudo<span class="w"> </span>mkdir<span class="w"> </span>/etc/dracut.conf.d
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="nb">echo</span><span class="w"> </span><span class="s1">&#39;hostonly=&quot;yes&quot;&#39;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>tee<span class="w"> </span>/etc/dracut.conf.d/hostonly.conf
+</span></code></pre></div></p>
+<div class="language-shell highlight"><span class="filename">Install 'dracut'</span><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>dracut
+</span></code></pre></div>
+<p>After installation we need to recreate the 'initramfs'
+<div class="language-shell highlight"><span class="filename">Recreate 'initramfs'</span><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>sudo<span class="w"> </span>dracut<span class="w"> </span>-f
+</span></code></pre></div></p>
 
 
 
