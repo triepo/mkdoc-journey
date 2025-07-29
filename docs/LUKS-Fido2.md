@@ -1,18 +1,20 @@
+# Debian 13 (Trixie) with LUKS and hardware passkey
 
 On this page I will explain, how to decrypt LUKS encrypted partition
-
 
 I've tested it on several virtual machines and also my laptop works with this setup.
 You can take this at your own risk.
 I don't take any responsability for misconfiguration on your side
 
-### Prerequisites
- * Debian 13 setup with encryption
- * Hardware fido2 Token (e.g.: yubikey, Token2)
+## Prerequisites
 
-### Find Partition
- First we need find to find the encrypted filesystems.
- We will use `lsblk` to figure that out
+* Debian 13 setup with encryption
+* Hardware fido2 Token (e.g.: yubikey, Token2)
+
+## Find Partition
+
+First we need to find the encrypted filesystems.
+We will use `lsblk` to figure that out
 
 ```shell title="Output of 'lsblk'" linenums="1" hl_lines="7-10"
 nimda@trixie:~$ lsblk
@@ -26,11 +28,14 @@ vda                     254:0    0   20G  0 disk
     ├─trixie--vg-root   253:1    0   18G  0 lvm   /
     └─trixie--vg-swap_1 253:2    0    1G  0 lvm   [SWAP]
 nimda@trixie:~$ 
-```
-In this case we have `/dev/vda5`
 
-### Show fido2 key
-Next action will be, to check, if fido2 token is found using `systemd-cryptenroll`command
+```
+
+In this case we have **`/dev/vda5`**
+
+## Show fido2 key
+
+Next action will be, to check, if fido2 token is found using **`systemd-cryptenroll`**command
 
 ```shell title="Output of 'systemd-cryptenroll'"
 nimda@trixie:~$ systemd-cryptenroll --fido2-device=list
@@ -38,9 +43,11 @@ PATH         MANUFACTURER PRODUCT                  COMPATIBLE
 /dev/hidraw2 TOKEN2       FIDO2 Security Key(0026) ✓
 nimda@trixie:~$ 
 ```
+
 Now, as we have all needed information, we can enroll the token
 
-### Enroll
+## Enroll
+
 ```shell title="Enrolling token"
 nimda@trixie:~$ sudo systemd-cryptenroll /dev/vda5 --fido2-device=auto -fido2-with-client-pin=yes
 [sudo] Passwort für nimda: 
@@ -54,8 +61,11 @@ New FIDO2 token enrolled as key slot 1.
 nimda@trixie:~$ 
 ```
 
-### Checking
-To check, that the token was configured correctly, we can use the command `sudo cryptsetup luksDump /dev/vda5`
+## Checking
+
+To check, that the token was configured correctly, we can use the command
+
+**`sudo cryptsetup luksDump /dev/vda5`**
 
 ```shell title="Output of 'cryptsetup luksDump /dev/vda5'"
 ~~~
@@ -80,8 +90,10 @@ Tokens:
         Keyslot:    1
 ~~~
 ```
-### Edit /etc/crypttab
-Next step is to add `,fido2-device=auto` to file `/etc/crypttab`
+
+## Edit /etc/crypttab
+
+Next step is to add **`,fido2-device=auto`** to file **`/etc/crypttab`**
 
 ```shell title="Content of '/etc/crypttab'"
 nimda@trixie:~$ cat /etc/crypttab 
@@ -89,11 +101,14 @@ vda5_crypt UUID=fb3239d3-be24-446e-b956-8fe4aea8f34c none luks,discard,x-initrd.
 nimda@trixie:~$
 ```
 
-### initramfs
-As the tool `initramfs` has a bug not recognizing the option we added, we need to install `dracut`
+## initramfs
+
+As the tool **`initramfs`** has a bug not recognizing the option we added, we need to install **`dracut`**
 
 ## dracut
-Create config file for `dracut`
+
+Create config file for **`dracut`**
+
 ```shell title="'dracut' config"
 sudo mkdir /etc/dracut.conf.d
 echo 'hostonly="yes"' | sudo tee /etc/dracut.conf.d/hostonly.conf
@@ -104,6 +119,7 @@ sudo apt install dracut
 ```
 
 After installation we need to recreate the 'initramfs'
+
 ```shell title="Recreate 'initramfs'"
 sudo dracut -f
 ```
